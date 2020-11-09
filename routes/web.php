@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('order', 'OrderController');
     Route::get('batch-order/{data}', 'OrderController@batchOrder')->name('batch.order');
+    Route::get('lab-order/{data}', 'OrderController@labOrder')->name('lab.order');
     Route::get('order-entry', 'OrderController@newOrder')->name('order.entry');
     Route::get('simple-order/{data}', 'OrderController@simpleOrder')->name('simple.order');
     Route::get('grey-order/{data}', 'OrderController@greyOrder')->name('grey.order');
@@ -59,6 +60,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('process-entry', 'ProcessController');
 
     Route::resource('finished', 'FinishedController');
+    Route::get('finished-entry', 'FinishedController@newFinished')->name('finished.entry');
+
+    Route::resource('Lab', 'LabController');
+    Route::get('Lab-entry', 'LabController@newLab')->name('lab.entry');
+
+    Route::resource('delivery', 'DeliveryController');
+    Route::get('delivery-entry', 'DeliveryController@newDelivery')->name('delivery.entry');
+
+    Route::get('delivery-challan/{data}', 'DeliveryController@deliveryChallan')->name('delivery.challan');
 
 
 });

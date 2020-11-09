@@ -40,9 +40,7 @@
             <tr>
                 <th>#</th>
                 <th>Factory Name</th>
-                <th>Challan No</th>
                 <th>Order No</th>
-                <th>Total Roll</th>
                 <th>Total Quantity</th>
                 <th>Date</th>
                 <th>Action</th>
@@ -53,9 +51,7 @@
                 <tr>
                     <td>{{$sl}}</td>@php $sl++; @endphp
                     <td>{{$orders->factory->factory_name}}</td>
-                    <td>{{$orders->challan_no}}</td>
                     <td>{{$orders->id}}</td>
-                    <td>{{$orders->total_roll}}</td>
                     <td>{{$orders->total_qty}}</td>
                     <td>{{$orders->date}}</td>
                     <td>
@@ -104,21 +100,9 @@
                         <div class="col-md-6">
                             <table class="table border">
                                 <tr>
-                                    <td>Challan No:</td>
-                                    <td>
-                                        <span class="challan_no"></span>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td>Date:</td>
                                     <td>
                                         <span class="date"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Total Roll:</td>
-                                    <td>
-                                        <span class="total_roll"></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -145,7 +129,6 @@
                                 <th scope="col" style="white-space: nowrap">Grey GSM/S/L</th>
                                 <th scope="col" style="white-space: nowrap">F/GSM</th>
                                 <th scope="col" style="white-space: nowrap">Color</th>
-                                <th scope="col" style="white-space: nowrap">Roll</th>
                                 <th scope="col" style="white-space: nowrap">Quantity</th>
                             </tr>
                             </thead>
@@ -178,9 +161,7 @@
                 success: function (data) {
                     $('.factory_id').html(data.order.factory.factory_name);
                     $('.factory_address').html(data.order.factory.address);
-                    $('.challan_no').html(data.order.challan_no);
                     $('.date').html(data.order.date);
-                    $('.total_roll').html(data.order.total_roll);
                     $('.total_qty').html(data.order.total_qty);
                     $(".AddPurchaseDiv").html('');
                     for (let i = 0; i < data.order.order_list.length; i++) {
@@ -207,7 +188,6 @@
                             '                                        <td>' + data.order.order_list[i].gray_gsm + '</td>\n' +
                             '                                        <td>' + data.order.order_list[i].gsm + '</td>\n' +
                             '                                        <td>' + colour + '</td>\n' +
-                            '                                        <td>' + data.order.order_list[i].roll + '</td>\n' +
                             '                                        <td>' + data.order.order_list[i].quantity + '</td>\n' +
                             '                                    </tr>';
                         $(".AddPurchaseDiv").append(product);

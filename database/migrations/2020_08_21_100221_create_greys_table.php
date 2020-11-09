@@ -18,11 +18,13 @@ class CreateGreysTable extends Migration
             $table->integer('order_id');
             $table->integer('order_list_id');
             $table->date('date');
-            $table->string('total_qty');
+            $table->string('chalan_no')->nullable();
             $table->string('today_receive');
-            $table->string('remaining');
+            $table->string('dia')->nullable();
+            $table->string('gsm')->nullable();
             $table->string('remarks')->nullable();
-            $table->boolean('batch_create')->default(0);
+            $table->integer('lab_id')->nullable();
+            $table->boolean('lab_status')->default(0);
             $table->timestamps();
         });
     }

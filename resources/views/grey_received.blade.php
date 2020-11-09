@@ -57,8 +57,8 @@
                     <th scope="col" class="border-0">Style</th>
                     <th scope="col" class="border-0">Fabrics Type</th>
                     <th scope="col" class="border-0">Color</th>
-                    <th scope="col" class="border-0">Roll</th>
                     <th scope="col" class="border-0">Order Quantity</th>
+                    <th scope="col" class="border-0">Grey Receive</th>
                 </tr>
                 </thead>
                 <tbody class="AddPurchaseDiv">
@@ -117,10 +117,10 @@
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-6 col-5 text-right">FAB/TYPE</div>
+                                <div class="col-md-6 col-5 text-right">Chalan No.</div>
                                 <div class="form-group col-md-6 col-7">
-                                    <input type="text" class="form-control fab_type"
-                                           placeholder="FAB/TYPE" readonly>
+                                    <input type="text" name="chalan_no" class="form-control"
+                                           placeholder="Enter Chalan No">
                                 </div>
                             </div>
                             <div class="row">
@@ -136,22 +136,30 @@
                         <table class="table mb-0 mt-4">
                             <thead class="bg-light">
                             <tr>
-                                <th scope="col" style="white-space: nowrap">Total Order Quantity</th>
+                                <th scope="col" style="white-space: nowrap">Grey Receive</th>
                                 <th scope="col">Today Receive</th>
-                                <th scope="col" style="white-space: nowrap">Remaining Order Quantity</th>
+                                <th scope="col" style="white-space: nowrap">Total Grey Receive</th>
+                                <th scope="col" style="white-space: nowrap">DIA</th>
+                                <th scope="col" style="white-space: nowrap">GSM</th>
                                 <th scope="col" style="white-space: nowrap">Remarks</th>
                             </tr>
                             </thead>
                             <tbody class="AddOrderDiv">
                             <tr>
                                 <td>
-                                    <input type="text" name="total_qty"
-                                           class="form-control total_qty" max="255" readonly>
+                                    <input type="hidden" name="total_qty"
+                                           class="total_qty">
+                                    <input type="number" name="grey_receive"
+                                           class="form-control grey_receive" max="255" readonly>
                                 </td>
                                 <td><input name="today_receive" type="text"
                                            class="form-control today_receive" max="255"></td>
-                                <td><input name="remaining" type="text"
+                                <td><input name="remaining" type="number"
                                            class="form-control remaining" max="255" readonly></td>
+                                <td><input name="dia" type="text"
+                                           class="form-control" max="255"></td>
+                                <td><input name="gsm" type="text"
+                                           class="form-control" max="255"></td>
                                 <td><input name="remarks" type="text"
                                            class="form-control gray_wt" max="255"></td>
 
@@ -224,6 +232,7 @@
     <script src="{{asset('assets/scripts/app/app-transaction-history.1.3.1.min.js')}}"></script>
     <script src="{{asset('assets/sweetalert/sweetalert.js')}}"></script>
     <script>
+        $.fn.datepicker.defaults.format = "dd MM, yyyy";
         $('.datepicker').datepicker("setDate", new Date());
         $(document).on('keyup', '#order_no', () => {
             let order_no = $('#order_no').val();
@@ -238,34 +247,32 @@
                     success: function (data) {
                         $(".AddPurchaseDiv").html('');
                         for (let i = 0; i < data.order.order_list.length; i++) {
-                            if (data.order.order_list[i].remaining == 0) {
+
+                            var style, colour;
+                            if (data.order.order_list[i].style == null) {
+                                style = ''
                             } else {
-                                var style, colour;
-                                if (data.order.order_list[i].style == null) {
-                                    style = ''
-                                } else {
-                                    style = data.order.order_list[i].style.style_name
-                                }
-                                if (data.order.order_list[i].colour == null) {
-                                    colour = ''
-                                } else {
-                                    colour = data.order.order_list[i].colour.colour_name
-                                }
-                                let product = '<tr>\n' +
-                                    '<td><div class="custom-control custom-checkbox mb-1">\n' +
-                                    '                              <input type="checkbox" value="' + data.order.order_list[i].id + '" class="custom-control-input" id="formsCheckbox' + i + '">\n' +
-                                    '                              <label class="custom-control-label" for="formsCheckbox' + i + '"></label>\n' +
-                                    '                            </div></td>' +
-                                    '                                        <td>' + data.order.factory.factory_name + '</td>\n' +
-                                    '                                        <td>' + data.order.order_list[i].buyer + '</td>\n' +
-                                    '                                        <td>' + style + '</td>\n' +
-                                    '                                        <td>' + data.order.order_list[i].fabrics_type + '</td>\n' +
-                                    '                                        <td>' + colour + '</td>\n' +
-                                    '                                        <td>' + data.order.order_list[i].roll + '</td>\n' +
-                                    '                                        <td>' + data.order.order_list[i].remaining + '</td>\n' +
-                                    '                                    </tr>';
-                                $(".AddPurchaseDiv").append(product);
+                                style = data.order.order_list[i].style.style_name
                             }
+                            if (data.order.order_list[i].colour == null) {
+                                colour = ''
+                            } else {
+                                colour = data.order.order_list[i].colour.colour_name
+                            }
+                            let product = '<tr>\n' +
+                                '<td><div class="custom-control custom-checkbox mb-1">\n' +
+                                '                              <input type="checkbox" value="' + data.order.order_list[i].id + '" class="custom-control-input" id="formsCheckbox' + i + '">\n' +
+                                '                              <label class="custom-control-label" for="formsCheckbox' + i + '"></label>\n' +
+                                '                            </div></td>' +
+                                '                                        <td>' + data.order.factory.factory_name + '</td>\n' +
+                                '                                        <td>' + data.order.order_list[i].buyer.buyer + '</td>\n' +
+                                '                                        <td>' + style + '</td>\n' +
+                                '                                        <td>' + data.order.order_list[i].fabrics_type + '</td>\n' +
+                                '                                        <td>' + colour + '</td>\n' +
+                                '                                        <td>' + data.order.order_list[i].quantity + '</td>\n' +
+                                '                                        <td>' + data.order.order_list[i].grey_received + '</td>\n' +
+                                '                                    </tr>';
+                            $(".AddPurchaseDiv").append(product);
                         }
                         $("#order_table").show();
                         $(".spinner-border").hide();
@@ -306,7 +313,8 @@
                     $('.colour').val(colour);
                     $('.fab_type').val(data.order.fabrics_type);
                     $('.yarn_count').val(data.order.yarn_count);
-                    $('.total_qty').val(data.order.remaining);
+                    $('.total_qty').val(data.order.quantity);
+                    $('.grey_receive').val(data.order.grey_received);
                     $(".spinner-border").hide();
                     $("#order_table").show();
                 },
@@ -321,7 +329,7 @@
         $(document).on('keyup', '.today_receive', function () {
             if (/\D/g.test(this.value))
                 this.value = this.value.replace(/\D/g, '');
-            $('.remaining').val($('.total_qty').val() - this.value);
+            $('.remaining').val(parseFloat($('.grey_receive').val()) + parseFloat(this.value));
         });
 
     </script>

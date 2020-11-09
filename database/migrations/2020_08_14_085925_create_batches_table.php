@@ -16,16 +16,11 @@ class CreateBatchesTable extends Migration
         Schema::create('batches', function (Blueprint $table) {
             $table->id();
             $table->integer('order_id');
-            $table->integer('order_list_id');
             $table->date('date');
             $table->string('batch_no')->unique();
-            $table->string('machine_no')->nullable();
-            $table->string('po_no')->nullable();
+            $table->string('work_order')->nullable();
             $table->string('compostion')->nullable();
             $table->string('stitch_length')->nullable();
-            $table->string('mark_hole')->nullable();
-            $table->string('y_lot')->nullable();
-            $table->string('gray_wt')->nullable();
             $table->timestamps();
         });
     }

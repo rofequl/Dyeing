@@ -75,7 +75,6 @@
                 <th>Buyer Name</th>
                 <th>Style</th>
                 <th>Colour</th>
-                <th>Roll</th>
                 <th>Quantity</th>
                 <th>Date</th>
             </tr>
@@ -88,7 +87,6 @@
                     <td>{{$orders->buyer->buyer}}</td>
                     <td>{{$orders->style==''?'':$orders->style->style_name}}</td>
                     <td>{{$orders->colour==''?'':$orders->colour->colour_name}}</td>
-                    <td>{{$orders->roll}}</td>
                     <td>{{$orders->quantity}}</td>
                     <td>{{$orders->order->date}}</td>
                 </tr>
@@ -101,7 +99,6 @@
                 <td></td>
                 <td></td>
                 <td>Total:</td>
-                <td class="border text-center">{{$order->sum('roll')}}</td>
                 <td class="border text-center">{{$order->sum('quantity')}}</td>
                 <td></td>
             </tr>

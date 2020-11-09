@@ -1,6 +1,7 @@
 <?php
 
 use App\Batch;
+use App\BatchList;
 use App\Grey;
 use App\Order;
 use App\Process;
@@ -10,6 +11,12 @@ function get_process($id)
 {
     $id = json_decode($id);
     return Process::whereIn('id', $id)->get();
+}
+
+function get_delivery($id)
+{
+    $id = json_decode($id);
+    return Batch::whereIn('batch_no', $id)->get();
 }
 
 function preOrderQty($factoryId, $date)
@@ -64,15 +71,18 @@ function preBatchQty($factoryId, $date)
     $batch = 0;
     $batch2 = 0;
     foreach ($order as $orders) {
-        $data = Batch::where('order_id', $orders->id)->select('order_id', DB::raw('sum(gray_wt) as total'))->groupBy('order_id')->get()->first();
-        $data2 = Batch::where('order_id', $orders->id)->where('date', $date)->select('order_id', DB::raw('sum(gray_wt) as total'))->groupBy('order_id')->get()->first();
-        if ($data != null){
-            $batch += $data->total;
+        $data = Batch::where('order_id', $orders->id)->select('id')->get();
+        $batchlist = BatchList::whereIn('batch_id', $data)->get();
+        $data2 = Batch::where('order_id', $orders->id)->where('date', $date)->select('id')->get();
+        $batchlist2 = BatchList::whereIn('batch_id', $data2)->get();
+        if ($batchlist != null) {
+            $batch += $batchlist->sum('grey_wt');
         }
-        if ($data2 != null){
-            $batch2 += $data2->total;
+        if ($batchlist2 != null) {
+            $batch2 += $batchlist2->sum('grey_wt');
         }
     }
+
     return $batch - $batch2;
 }
 
@@ -82,9 +92,11 @@ function getBatchQty($factoryId, $date)
     $order = Order::where('factory_id', $factoryId)->get();
     $batch2 = 0;
     foreach ($order as $orders) {
-        $data2 = Batch::where('order_id', $orders->id)->where('date', $date)->select('order_id', DB::raw('sum(gray_wt) as total'))->groupBy('order_id')->get()->first();
-        if ($data2 != null){
-            $batch2 += $data2->total;
+        $data2 = Batch::where('order_id', $orders->id)->where('date', $date)->select('id')->get();
+        $batchlist2 = BatchList::whereIn('batch_id', $data2)->get();
+
+        if ($batchlist2 != null) {
+            $batch2 += $batchlist2->sum('grey_wt');
         }
     }
     return $batch2;
@@ -96,9 +108,10 @@ function totalBatchQty($factoryId, $date)
     $order = Order::where('factory_id', $factoryId)->get();
     $batch = 0;
     foreach ($order as $orders) {
-        $data = Batch::where('order_id', $orders->id)->select('order_id', DB::raw('sum(gray_wt) as total'))->groupBy('order_id')->get()->first();
-        if ($data != null){
-            $batch += $data->total;
+        $data = Batch::where('order_id', $orders->id)->select('id')->get();
+        $batchlist = BatchList::whereIn('batch_id', $data)->get();
+        if ($batchlist != null) {
+            $batch += $batchlist->sum('grey_wt');
         }
     }
     return $batch;

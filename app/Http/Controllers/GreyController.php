@@ -12,7 +12,7 @@ class GreyController extends Controller
 {
     public function index()
     {
-        $grey = Grey::orderBy('id','DESC')->get();
+        $grey = Grey::orderBy('id', 'DESC')->get();
         return view('grey', compact('grey'));
     }
 
@@ -28,32 +28,31 @@ class GreyController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->all());
         $request->validate([
             'date' => 'required|max:255',
             'remarks' => 'max:255',
+            'dia' => 'max:255',
+            'gsm' => 'max:255',
             'order_list_id' => 'required',
-            'total_qty' => 'required',
             'today_receive' => 'required',
-            'remaining' => 'required',
         ]);
 
-        if ($request->total_qty < $request->today_receive) {
-            return back()->withErrors(['message' => 'Your receive not much bigger than total quantity']);
-        }
-
         $order = Order_list::findOrFail($request->order_list_id);
-        $order->remaining = $request->total_qty - $request->today_receive;
+        $order->remaining = $request->total_qty - ($request->today_receive + $request->grey_receive);
+        $order->grey_received = $request->grey_receive + $request->today_receive;
         $order->save();
 
-        $date = DateTime::createFromFormat('m/d/Y', $request->date);
+        $date = DateTime::createFromFormat('d F, Y', $request->date);
         $insert = new Grey();
         $insert->date = $date->format('Y-m-d');
         $insert->order_list_id = $request->order_list_id;
         $insert->order_id = $order->order_id;
-        $insert->total_qty = $request->total_qty;
         $insert->today_receive = $request->today_receive;
-        $insert->remaining = $request->remaining;
         $insert->remarks = $request->remarks;
+        $insert->chalan_no = $request->chalan_no;
+        $insert->dia = $request->dia;
+        $insert->gsm = $request->gsm;
         $insert->save();
         Session::flash('message', 'Grey entry successfully');
         return redirect('grey');

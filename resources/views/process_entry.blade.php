@@ -71,10 +71,8 @@
             <tr>
                 <th>#</th>
                 <th>Factory Name</th>
-                <th>Buyer Name</th>
                 <th>Batch No.</th>
                 <th>Order No.</th>
-                <th>Grey Quantity</th>
                 <th>Process Name</th>
                 <th>Created</th>
             </tr>
@@ -83,11 +81,9 @@
             @foreach($process_list as $process_lists)
                 <tr>
                     <td>{{$sl}}</td>@php $sl++; @endphp
-                    <td>{{$process_lists->batch->order_list->order->factory->factory_name}}</td>
-                    <td>{{$process_lists->batch->order_list->buyer->buyer}}</td>
+                    <td>{{$process_lists->batch->order->factory->factory_name}}</td>
                     <td>{{$process_lists->batch->batch_no}}</td>
-                    <td>{{$process_lists->batch->order_list->order_id}}</td>
-                    <td>{{$process_lists->batch->gray_wt}}</td>
+                    <td>{{$process_lists->batch->order_id}}</td>
                     <td>
                         @foreach(get_process($process_lists->process_id) as $processes)
                             <span class="badge badge-primary m-1">{{$processes->process_name}}</span>

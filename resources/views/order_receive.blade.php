@@ -64,13 +64,6 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-6 col-5 text-right">Challan No.</div>
-                                <div class="col-md-6 col-7">
-                                    <input type="text" class="form-control totalValue" name="challan_no"
-                                           max="11">
-                                </div>
-                            </div>
                             <div class="row mt-2">
                                 <div class="col-md-6 col-5 text-right">Current Date</div>
                                 <div class="input-daterange input-group input-group-sm ml-auto col-md-6 col-7">
@@ -100,7 +93,6 @@
                                 <th scope="col" style="white-space: nowrap">Grey GSM/S/L</th>
                                 <th scope="col" style="white-space: nowrap">F/GSM</th>
                                 <th scope="col" style="white-space: nowrap">Color</th>
-                                <th scope="col" style="white-space: nowrap">Roll</th>
                                 <th scope="col" style="white-space: nowrap">Quantity</th>
                                 <th scope="col" style="white-space: nowrap">Action</th>
                             </tr>
@@ -131,8 +123,6 @@
                                 <td>
                                     <select id="colour1" name="colour[]" class="form-control"></select>
                                 </td>
-                                <td><input name="roll[]" id="roll1" type="text"
-                                           class="form-control totalValue" max="255" required></td>
                                 <td><input id="quantity1" type="text" name="quantity[]" class="form-control totalValue"
                                            max="255" required>
                                 </td>
@@ -149,15 +139,6 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="row mt-2">
-                                <div class="col-6 text-right">
-                                    Total Roll:
-                                </div>
-                                <div class="col-6">
-                                    <input id="total_roll" name="total_roll" type="text" class="form-control"
-                                           readonly>
-                                </div>
-                            </div>
                             <div class="row mt-2">
                                 <div class="col-6 text-right">
                                     Total Qty:
@@ -220,6 +201,7 @@
         $(document).ready(function () {
             InsertCreate();
         });
+        $.fn.datepicker.defaults.format = "dd MM, yyyy";
         $('.datepicker').datepicker("setDate", new Date());
         $('#factory_id').change(function () {
             AddSelectBuyer2();
@@ -401,9 +383,6 @@
                 '                                           class="form-control ProductEdit" max="255"></td>\n' +
                 '                                <td>\n' +
                 '                                    <select id="colour' + count + '" name="colour[]" class="form-control"></select>\n' +
-                '                                </td>\n' +
-                '                                <td><input name="roll[]" id="roll' + count + '" type="text"\n' +
-                '                                           class="form-control totalValue" max="255" required>\n' +
                 '                                </td>\n' +
                 '                                <td><input id="quantity' + count + '" type="text" name="quantity[]" class="form-control totalValue" max="255" required></td>\n' +
                 '                                        <td><button type="button" class="btn btn-danger shadow-none px-2" onclick="AddOrderDivRemove(\'AddPurchaseTr' + count + '\')" title="Remove Input"><i class="fas fa-1x fa-minus-circle"></i></button></td>\n' +

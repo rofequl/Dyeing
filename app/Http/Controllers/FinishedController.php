@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Batch;
+use App\BatchList;
 use App\Finished;
 use Session;
 use DateTime;
@@ -11,8 +13,20 @@ class FinishedController extends Controller
 {
     public function index()
     {
-        $finished = Finished::all();
+        $finished = BatchList::where('finished_received', 1)->get();
         return view('finished', compact('finished'));
+    }
+
+    public function newFinished(Request $request)
+    {
+        $batch = null;
+        if ($request->batch_no) {
+            $batch = Batch::where('batch_no', $request->batch_no)->first();
+            if (!$batch) {
+                return back()->withErrors(['message' => 'Batch no Invalid']);
+            }
+        }
+        return view('finished_receive', compact('batch'));
     }
 
     public function create()
@@ -23,24 +37,22 @@ class FinishedController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'batch_id' => 'required|unique:finisheds',
+            'batchlist_id' => 'required',
             'gray_qty' => 'required',
             'finished_qty' => 'required',
             'waste' => 'required',
-            'date' => 'required',
         ]);
-        $date = DateTime::createFromFormat('m/d/Y', $request->date);
-        $insert = new Finished();
-        $insert->date = $date->format('Y-m-d');
-        $insert->batch_id = $request->batch_id;
-        $insert->gray_qty = $request->gray_qty;
+
+        $insert = BatchList::findOrFail($request->batchlist_id);
+        $insert->grey_wt = $request->gray_qty;
         $insert->finished_qty = $request->finished_qty;
         $insert->waste = $request->waste;
+        $insert->finished_received = 1;
         $insert->save();
 
 
         Session::flash('message', 'Finished entry successfully');
-        return redirect('finished');
+        return redirect()->back();
     }
 
     public function show($id)

@@ -26,13 +26,18 @@ class Order_list extends Model
         return $this->belongsTo(Colour::class);
     }
 
-    public function batch()
-    {
-        return $this->hasMany(Batch::class, 'order_list_id');
-    }
-
     public function grey()
     {
         return $this->hasMany(Grey::class, 'order_list_id');
+    }
+
+    public function lab()
+    {
+        return $this->hasMany(Lab::class, 'order_list_id');
+    }
+
+    public function batchlist()
+    {
+        return $this->hasMany(BatchList::class, 'order_list_id');
     }
 }

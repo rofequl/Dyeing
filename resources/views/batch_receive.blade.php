@@ -58,6 +58,7 @@
                     <th scope="col" class="border-0">Fabrics Type</th>
                     <th scope="col" class="border-0">Color</th>
                     <th scope="col" class="border-0">Grey Quantity</th>
+                    <th scope="col" class="border-0">LAB APP</th>
                 </tr>
                 </thead>
                 <tbody class="AddPurchaseDiv">
@@ -84,7 +85,7 @@
                                 <div class="form-group col-md-6 col-7">
                                     <input type="text" class="form-control factory_name"
                                            placeholder="Factory Name" readonly>
-                                    <input type="hidden" name="order_list_id" class="order_list_id" required>
+                                    <input type="hidden" name="order_id" class="order_id" required>
                                 </div>
                             </div>
                             <div class="row" id="member_id">
@@ -95,13 +96,6 @@
                                 </div>
                             </div>
                             <div class="row" id="member_id">
-                                <div class="col-md-4 col-5 text-right">Machine No.</div>
-                                <div class="form-group col-md-6 col-7">
-                                    <input type="text" name="machine_no" class="form-control machine_no"
-                                           placeholder="Enter Machine No.">
-                                </div>
-                            </div>
-                            <div class="row" id="member_id">
                                 <div class="col-md-4 col-5 text-right">Buyer Name</div>
                                 <div class="form-group col-md-6 col-7">
                                     <input type="text" class="form-control buyer_name"
@@ -109,10 +103,10 @@
                                 </div>
                             </div>
                             <div class="row" id="member_id">
-                                <div class="col-md-4 col-5 text-right">Po No.</div>
+                                <div class="col-md-4 col-5 text-right">Style</div>
                                 <div class="form-group col-md-6 col-7">
-                                    <input type="text" name="po_no" class="form-control po_no"
-                                           placeholder="Enter Po No.">
+                                    <input type="text" class="form-control style"
+                                           placeholder="Style." readonly>
                                 </div>
                             </div>
                             <div class="row" id="member_id">
@@ -120,6 +114,13 @@
                                 <div class="form-group col-md-6 col-7">
                                     <input type="text" class="form-control colour"
                                            placeholder="Colour" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-5 text-right">Work Order</div>
+                                <div class="form-group col-md-6 col-7">
+                                    <input type="text" class="form-control" name="work_order"
+                                           placeholder="Enter Work Order">
                                 </div>
                             </div>
                         </div>
@@ -177,6 +178,7 @@
                         <table class="table mb-0 mt-4">
                             <thead class="bg-light">
                             <tr>
+                                <th scope="col" style="white-space: nowrap">FABRICS TYPE</th>
                                 <th scope="col" style="white-space: nowrap">MC/DIA</th>
                                 <th scope="col">FINISH D/A</th>
                                 <th scope="col" style="white-space: nowrap">MARK/HOLE</th>
@@ -185,25 +187,8 @@
                                 <th scope="col" style="white-space: nowrap">ROLL</th>
                             </tr>
                             </thead>
-                            <tbody class="AddOrderDiv">
-                            <tr>
-                                <td>
-                                    <input type="text"
-                                           class="form-control mc_dia" max="255" readonly>
-                                </td>
-                                <td>
-                                    <input type="text"
-                                           class="form-control finish_dia" max="255" readonly>
-                                </td>
-                                <td><input name="mark_hole" type="text"
-                                           class="form-control mark_hole" max="255"></td>
-                                <td><input name="y_lot" type="text"
-                                           class="form-control y_lot" max="255"></td>
-                                <td><input name="gray_wt" type="text"
-                                           class="form-control gray_wt" max="255" required></td>
-                                <td><input type="text"
-                                           class="form-control roll" max="255" readonly></td>
-                            </tr>
+                            <tbody class="AddBatchDiv">
+
                             </tbody>
 
                         </table>
@@ -297,6 +282,7 @@
                                 '                                        <td>' + data.order[i].fabrics_type + '</td>\n' +
                                 '                                        <td>' + data.order[i].color + '</td>\n' +
                                 '                                        <td>' + data.order[i].grey_receive + '</td>\n' +
+                                '                                        <td>' + data.order[i].lab_app + '</td>\n' +
                                 '                                    </tr>';
                             $(".AddPurchaseDiv").append(product);
                         }
@@ -316,8 +302,12 @@
         });
 
         $(document).on('change', 'input[type="checkbox"]', function () {
-            $('input[type="checkbox"]').not(this).prop('checked', false);
             let id = $(this).attr('value');
+            if ($(this).is(":checked")) {
+            } else {
+                $('.batchlist' + id).remove();
+                return;
+            }
             $.ajax({
                 url: "{!! route('simple.order','') !!}" + "/" + id,
                 type: 'get',
@@ -333,16 +323,43 @@
                     } else {
                         colour = data.order.order_list.colour.colour_name
                     }
-                    $('.order_list_id').val(data.order.order_list_id);
+                    $('.order_id').val(data.order.order_id);
                     $('.factory_name').val(data.order.order.factory.factory_name);
                     $('.buyer_name').val(data.order.order_list.buyer.buyer);
+                    $('.style').val(data.order.order_list.style.style_name);
                     $('.colour').val(colour);
                     $('.fab_type').val(data.order.order_list.fabrics_type);
                     $('.yarn_count').val(data.order.order_list.yarn_count);
                     $('.finish_gsm').val(data.order.order_list.gsm);
                     $('.mc_dia').val(data.order.order_list.dia);
                     $('.finish_dia').val(data.order.order_list.f_dia);
-                    $('.roll').val(data.order.order_list.roll);
+
+                    let product = ' <tr class="batchlist' + id + '">\n' +
+                        '                                <td>\n' +
+                        '<input type="hidden" name="order_list_id[]" value="' + data.order.order_list_id + '" required>' +
+                        '<input type="hidden" name="lab_id[]" value="' + data.order.id + '" required>' +
+                        '                                    <input type="text"\n' +
+                        '                                           class="form-control" value="' + data.order.order_list.fabrics_type + '" max="255" readonly>\n' +
+                        '                                </td>\n' +
+                        '                                <td>\n' +
+                        '                                    <input type="text"\n' +
+                        '                                           class="form-control" value="' + data.order.order_list.dia + '" max="255" readonly>\n' +
+                        '                                </td>\n' +
+                        '                                <td>\n' +
+                        '                                    <input type="text"\n' +
+                        '                                           class="form-control" value="' + data.order.order_list.f_dia + '" max="255" readonly>\n' +
+                        '                                </td>\n' +
+                        '                                <td><input name="mark_hole[]" type="text"\n' +
+                        '                                           class="form-control mark_hole" max="255"></td>\n' +
+                        '                                <td><input name="y_lot[]" type="text"\n' +
+                        '                                           class="form-control y_lot" max="255"></td>\n' +
+                        '                                <td><input name="gray_wt[]" type="number"\n' +
+                        '                                           class="form-control gray_wt" max="' + data.order.remaining_grey + '" required></td>\n' +
+                        '                                <td><input name="roll[]" type="text"\n' +
+                        '                                           class="form-control roll" max="255"></td>\n' +
+                        '                            </tr>';
+
+                    $(".AddBatchDiv").append(product);
                     $(".spinner-border").hide();
                     $("#order_table").show();
                 },

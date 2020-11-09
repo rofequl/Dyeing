@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Batch;
+use App\BatchList;
 use App\Factory;
 use App\Grey;
+use App\Lab;
 use App\Order;
 use App\Order_list;
 use Illuminate\Http\Request;
@@ -31,37 +33,49 @@ class BatchController extends Controller
         $request->validate([
             'date' => 'required|max:255',
             'batch_no' => 'required|max:11|unique:batches',
-            'order_list_id' => 'required',
+            'order_id' => 'required',
             'gray_wt' => 'required',
+            'gray_wt.*' => 'required',
         ]);
-        $order = Order_list::findOrFail($request->order_list_id);
 
-        $grey = Grey::where('order_list_id', $order->id)->get();
-        $batch = Batch::where('order_list_id', $order->id)->select('order_list_id', DB::raw('sum(gray_wt) as total'))->groupBy('order_list_id')->get()->first();
-        $quantity = $grey->sum('today_receive');
-        if ($batch != null) {
-            $quantity -= $batch->total;
+        for ($i = 0; $i < count($request->gray_wt); $i++) {
+            $lab = Lab::findOrFail($request->lab_id[$i]);
+            if ($lab->remaining_grey < $request->gray_wt[$i]) {
+                return back()->withErrors(['message' => 'Your Grey/WT not much bigger than Grey Received']);
+            }
         }
-
-        if ($request->gray_wt > $quantity){
-            return back()->withErrors(['message' => 'Your Grey/WT not much bigger than Grey Received']);
-        }
-
 
         $date = DateTime::createFromFormat('m/d/Y', $request->date);
         $insert = new Batch();
         $insert->date = $date->format('Y-m-d');
-        $insert->order_id = $order->order_id;
-        $insert->order_list_id = $request->order_list_id;
+        $insert->order_id = $request->order_id;
         $insert->batch_no = $request->batch_no;
-        $insert->machine_no = $request->machine_no;
-        $insert->po_no = $request->po_no;
+        $insert->work_order = $request->work_order;
         $insert->compostion = $request->compostion;
         $insert->stitch_length = $request->stitch_length;
-        $insert->mark_hole = $request->mark_hole;
-        $insert->y_lot = $request->y_lot;
-        $insert->gray_wt = $request->gray_wt;
         $insert->save();
+
+        for ($i = 0; $i < count($request->gray_wt); $i++) {
+            $lab = Lab::findOrFail($request->lab_id[$i]);
+            $batch_amount = $lab->batch_amount + $request->gray_wt[$i];
+            $remaining = $lab->remaining_grey - $request->gray_wt[$i];
+            $lab->batch_amount = $batch_amount;
+            $lab->remaining_grey = $remaining;
+            if ($remaining < 1) {
+                $lab->batch_status = 1;
+            }
+            $lab->save();
+
+            $batch_list = new BatchList();
+            $batch_list->order_list_id = $request->order_list_id[$i];
+            $batch_list->lab_id = $request->lab_id[$i];
+            $batch_list->batch_id = $insert->id;
+            $batch_list->mark_hole = $request->mark_hole[$i];
+            $batch_list->y_lot = $request->y_lot[$i];
+            $batch_list->grey_wt = $request->gray_wt[$i];
+            $batch_list->roll = $request->roll[$i];
+            $batch_list->save();
+        }
 
         Session::flash('message', 'Batch entry successfully');
         return redirect('batch');
@@ -69,7 +83,7 @@ class BatchController extends Controller
 
     public function show($id)
     {
-        $batch = Batch::with('order_list', 'order_list.buyer', 'order_list.style', 'order_list.colour', 'order_list.order', 'order_list.order.factory')->findOrFail($id);
+        $batch = Batch::with('batchlist.order_list.buyer', 'batchlist.order_list.style', 'batchlist.order_list.colour', 'order.factory')->findOrFail($id);
         return response()->json(['status' => 'success', 'batch' => $batch], 200);
     }
 

@@ -5,7 +5,7 @@
             <a class="navbar-brand w-100 mr-0" href="{{route('home')}}" style="line-height: 25px;">
                 <div class="d-table m-auto">
 
-                    <span class="d-none d-md-inline ml-1">Dyeing Factory</span>
+                    <span class="d-none d-md-inline ml-1 font-weight-bold" style="font-family: 'Chilanka', cursive;">Yarn Museum</span>
                 </div>
             </a>
             <a class="toggle-sidebar d-sm-inline d-md-none d-lg-none">
@@ -50,6 +50,13 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{Route::current()->getName() == 'Lab.index'?'active':''}}"
+                   href="{{route('Lab.index')}}">
+                    <i class="material-icons"></i>
+                    <span>LAB Entry</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{route('batch.index')}}">
                     <i class="material-icons"></i>
                     <span>Batch</span>
@@ -68,9 +75,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{route('delivery.index')}}">
                     <i class="material-icons"></i>
-                    <span>Delivery</span>
+                    <span>Delivery Challan</span>
                 </a>
             </li>
             <li class="nav-item dropdown">

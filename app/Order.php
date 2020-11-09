@@ -20,4 +20,19 @@ class Order extends Model
     {
         return $this->belongsTo(Factory::class);
     }
+
+    public function lab()
+    {
+        return $this->hasMany(Lab::class, 'order_id');
+    }
+
+    public function batch()
+    {
+        return $this->hasMany(Batch::class, 'order_id');
+    }
+
+    public function delivery()
+    {
+        return $this->hasMany(Delivery::class, 'order_id');
+    }
 }

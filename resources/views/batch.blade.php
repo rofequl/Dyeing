@@ -40,12 +40,11 @@
             <tr>
                 <th>#</th>
                 <th>Factory Name</th>
-                <th>Buyer Name</th>
                 <th>Batch No.</th>
                 <th>Order No.</th>
-                <th>Style</th>
-                <th>Colour</th>
-                <th>Grey / WT</th>
+                <th>Work Order</th>
+                <th>Compostion</th>
+                <th>Stitch Length</th>
                 <th>Date</th>
                 <th>Action</th>
             </tr>
@@ -54,14 +53,13 @@
             @foreach($batch as $batches)
                 <tr>
                     <td>{{$sl}}</td>@php $sl++; @endphp
-                    <td>{{$batches->order_list->order->factory->factory_name}}</td>
-                    <td>{{$batches->order_list->buyer->buyer}}</td>
+                    <td>{{$batches->order->factory->factory_name}}</td>
                     <td>{{$batches->batch_no}}</td>
-                    <td>{{$batches->order_list->order_id}}</td>
-                    <td>{{$batches->order_list->style->style_name}}</td>
-                    <td>{{$batches->order_list->colour->colour_name}}</td>
-                    <td>{{$batches->gray_wt}}</td>
-                    <td>{{$batches->date}}</td>
+                    <td>{{$batches->order_id}}</td>
+                    <td>{{$batches->work_order}}</td>
+                    <td>{{$batches->compostion}}</td>
+                    <td>{{$batches->stitch_length}}</td>
+                    <td>{{date('d F, Y', strtotime($batches->date))}}</td>
                     <td>
                         <div class="btn-group btn-group-sm" role="group">
                             <button type="button" class="btn btn-white view" id="{{$batches->id}}">
@@ -104,27 +102,27 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Machine No:</td>
-                                    <td>
-                                        <span class="machine_no"></span>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td>Buyer Name:</td>
                                     <td>
                                         <span class="buyer_name"></span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Po No:</td>
+                                    <td>Style:</td>
                                     <td>
-                                        <span class="po_no"></span>
+                                        <span class="style"></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Colour:</td>
                                     <td>
                                         <span class="colour"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Work Order:</td>
+                                    <td>
+                                        <span class="work_order"></span>
                                     </td>
                                 </tr>
                             </table>
@@ -174,23 +172,17 @@
                         <table class="table table-bordered mb-0 mt-4 text-center">
                             <thead class="bg-light">
                             <tr>
+                                <th scope="col" style="white-space: nowrap">FABRICS TYPE</th>
                                 <th scope="col" style="white-space: nowrap">MC/DIA</th>
                                 <th scope="col" style="white-space: nowrap">FINISH D/A</th>
                                 <th scope="col" style="white-space: nowrap">MARK/HOLE</th>
                                 <th scope="col" style="white-space: nowrap">Y/LOT</th>
                                 <th scope="col" style="white-space: nowrap">Grey/WT</th>
                                 <th scope="col" style="white-space: nowrap">ROLL</th>
-                                <th scope="col" style="white-space: nowrap">FINISH W/T</th>
                             </tr>
                             </thead>
                             <tbody class="AddPurchaseDiv">
-                            <td class="mc_dia"></td>
-                            <td class="finish_dia"></td>
-                            <td class="mark_hole"></td>
-                            <td class="y_lot"></td>
-                            <td class="gray_wt"></td>
-                            <td class="roll"></td>
-                            <td class="finish_wt"></td>
+
                             </tbody>
                         </table>
                     </div>
@@ -208,33 +200,58 @@
     <script src="{{asset('assets/scripts/dataTables.responsive.min.js')}}"></script>
     <script src="{{asset('assets/scripts/app/app-transaction-history.1.3.1.min.js')}}"></script>
     <script src="{{asset('assets/sweetalert/sweetalert.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+            integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+            crossorigin="anonymous"></script>
     <script>
         $('.view').click(function () {
+            $(".AddPurchaseDiv").html('');
             let id = $(this).attr("id");
             $.ajax({
                 url: "{!! route('batch.show','') !!}" + "/" + id,
                 type: 'get',
                 dataType: 'json',
                 success: function (data) {
-                    $('.factory_name').html(data.batch.order_list.order.factory.factory_name);
+                    $('.factory_name').html(data.batch.order.factory.factory_name);
                     $('.batch_no').html(data.batch.batch_no);
-                    $('.machine_no').html(data.batch.machine_no);
-                    $('.buyer_name').html(data.batch.order_list.buyer.buyer);
-                    $('.po_no').html(data.batch.po_no);
-                    $('.colour').html(data.batch.order_list.colour.colour_name);
-                    $('.date').html(data.batch.date);
+                    $('.date').html(moment(data.batch.date).format('LL'));
+                    $('.work_order').html(data.batch.work_order);
                     $('.compostion').html(data.batch.compostion);
-                    $('.fab_type').html(data.batch.order_list.fabrics_type);
-                    $('.yarn_count').html(data.batch.order_list.yarn_count);
                     $('.stitch_length').html(data.batch.stitch_length);
-                    $('.finish_gsm').html(data.batch.order_list.gsm);
-                    $('.mc_dia').html(data.batch.order_list.dia);
-                    $('.finish_dia').html(data.batch.order_list.f_dia);
-                    $('.mark_hole').html(data.batch.mark_hole);
-                    $('.y_lot').html(data.batch.y_lot);
-                    $('.gray_wt').html(data.batch.gray_wt);
-                    $('.roll').html(data.batch.order_list.roll);
-                    $('.finish_wt').html(data.batch.Finish_wt);
+                    for (let i = 0; i < data.batch.batchlist.length; i++) {
+
+                        var style, colour;
+                        if (data.batch.batchlist[i].order_list.style == null) {
+                            style = ''
+                        } else {
+                            style = data.batch.batchlist[i].order_list.style.style_name
+                        }
+                        if (data.batch.batchlist[i].order_list.colour == null) {
+                            colour = ''
+                        } else {
+                            colour = data.batch.batchlist[i].order_list.colour.colour_name
+                        }
+
+                        $('.buyer_name').html(data.batch.batchlist[i].order_list.buyer.buyer);
+                        $('.colour').html(colour);
+                        $('.style').html(style);
+                        $('.fab_type').html(data.batch.batchlist[i].order_list.fabrics_type);
+                        $('.yarn_count').html(data.batch.batchlist[i].order_list.yarn_count);
+                        $('.finish_gsm').html(data.batch.batchlist[i].order_list.gsm);
+
+                        let product = '<tr>\n' +
+                            '                                        <td>' + data.batch.batchlist[i].order_list.fabrics_type + '</td>\n' +
+                            '                                        <td>' + data.batch.batchlist[i].order_list.dia + '</td>\n' +
+                            '                                        <td>' + data.batch.batchlist[i].order_list.f_dia + '</td>\n' +
+                            '                                        <td>' + data.batch.batchlist[i].mark_hole + '</td>\n' +
+                            '                                        <td>' + data.batch.batchlist[i].y_lot + '</td>\n' +
+                            '                                        <td>' + data.batch.batchlist[i].grey_wt + '</td>\n' +
+                            '                                        <td>' + data.batch.batchlist[i].roll + '</td>\n' +
+                            '                                    </tr>';
+                        $(".AddPurchaseDiv").append(product);
+                    }
+
+
                     $('#exampleModal').modal('show');
                 }
             });

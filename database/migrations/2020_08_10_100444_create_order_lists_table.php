@@ -26,9 +26,9 @@ class CreateOrderListsTable extends Migration
             $table->string('gray_gsm')->nullable();
             $table->string('gsm')->nullable();
             $table->integer('colour_id')->nullable();
-            $table->string('roll')->nullable();
             $table->string('quantity')->nullable();
-            $table->string('remaining')->nullable();
+            $table->string('remaining')->default(0);
+            $table->string('grey_received')->default(0);
             $table->timestamps();
         });
     }

@@ -44,9 +44,10 @@
                 <th>Order List No.</th>
                 <th>Factory Name</th>
                 <th>Buyer Name</th>
-                <th>Total Quantity</th>
-                <th>Total Received</th>
-                <th>Remaining Order Quantity</th>
+                <th>Colour</th>
+                <th>Grey Received</th>
+                <th>DIA</th>
+                <th>GSM</th>
                 <th>Remarks</th>
             </tr>
             </thead>
@@ -54,14 +55,15 @@
             @foreach($grey as $greys)
                 <tr>
                     <td>{{$sl}}</td>@php $sl++; @endphp
-                    <td>{{$greys->date}}</td>
+                    <td>{{date('d F, Y', strtotime($greys->date))}}</td>
                     <td>{{$greys->order_list->order_id}}</td>
                     <td>{{$greys->order_list_id}}</td>
                     <td>{{$greys->order_list->order->factory->factory_name}}</td>
                     <td>{{$greys->order_list->buyer->buyer}}</td>
-                    <td>{{$greys->total_qty}}</td>
+                    <td>{{$greys->order_list->colour->colour_name}}</td>
                     <td>{{$greys->today_receive}}</td>
-                    <td>{{$greys->remaining}}</td>
+                    <td>{{$greys->dia}}</td>
+                    <td>{{$greys->gsm}}</td>
                     <td>{{$greys->remarks}}</td>
                 </tr>
             @endforeach

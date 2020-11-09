@@ -28,7 +28,7 @@
         </div>
         <div class="table-responsive">
             <div id="printbar" style="float:right;margin-top: 7px;margin-right: 7px"></div>
-            <table class="transaction d-none">
+            <table class="transaction table-bordered d-none">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -57,7 +57,7 @@
                         <td>{{preGreyQty($orders->factory_id, $date)}}</td>
                         <td>{{getGreyRece($orders->factory_id, $date)}}</td>
                         <td class="text-primary">{{totalGreyQty($orders->factory_id, $date)}}</td>
-                        <td class="text-success">{{$orders->total - totalGreyQty($orders->factory_id, $date)}}</td>
+                        <td class="text-success">{{$orders->total - totalGreyQty($orders->factory_id, $date)}}
                         <td>{{preBatchQty($orders->factory_id, $date)}}</td>
                         <td>{{getBatchQty($orders->factory_id, $date)}}</td>
                         <td class="text-primary">{{totalBatchQty($orders->factory_id, $date)}}</td>
