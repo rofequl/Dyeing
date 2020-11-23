@@ -1,34 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9b95e563-ac4a-4ce9-bdca-599a178e199e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Batch.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Batch.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BatchController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/BatchController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FinishedController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FinishedController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/GreyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/GreyController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Order_list.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Order_list.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_08_10_100431_create_orders_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_08_10_100431_create_orders_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_08_10_100444_create_order_lists_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_08_10_100444_create_order_lists_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_08_14_085925_create_batches_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_08_14_085925_create_batches_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_08_21_100221_create_greys_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_08_21_100221_create_greys_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/batch.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/batch.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/batch_receive.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/batch_receive.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/finished.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/finished.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/grey.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/grey.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/grey_received.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/grey_received.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inc/sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/inc/sidebar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/order.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/order.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/order_receive.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/order_receive.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/process_entry.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/process_entry.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/report/order_report.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/report/order_report.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/report/stock_report.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/report/stock_report.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-    </list>
+    <list default="true" id="9b95e563-ac4a-4ce9-bdca-599a178e199e" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -213,6 +186,7 @@
       <workItem from="1602894552807" duration="2777000" />
       <workItem from="1602899154033" duration="15372000" />
       <workItem from="1602939157592" duration="8000" />
+      <workItem from="1606144385911" duration="623000" />
     </task>
     <servers />
   </component>
