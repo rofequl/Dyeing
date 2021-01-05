@@ -55,9 +55,12 @@ class ProcessController extends Controller
 
     public function destroy($id)
     {
-        $process = Process_list::where('process_id', $id)->get();
-        if ($process->count() > 0) {
-            return response()->json(['status' => 'error', 'message' => 'This Process already use another table'], 401);
+        $process = Process_list::all();
+        foreach ($process as $processes) {
+            $data = json_decode($processes->process_id);
+            if (in_array($id, $data)) {
+                return response()->json(['status' => 'error', 'message' => 'This Process already use another table'], 401);
+            }
         }
         $factory = Process::findOrFail($id);
         $factory->delete();

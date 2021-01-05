@@ -38,9 +38,11 @@ class BatchController extends Controller
             'gray_wt.*' => 'required',
         ]);
 
+        //dd($request->all());
+
         for ($i = 0; $i < count($request->gray_wt); $i++) {
-            $lab = Lab::findOrFail($request->lab_id[$i]);
-            if ($lab->remaining_grey < $request->gray_wt[$i]) {
+            $lab = Order_list::findOrFail($request->order_list_id[$i]);
+            if (((int)$lab->grey_received - (int)$lab->batch_received) < $request->gray_wt[$i]) {
                 return back()->withErrors(['message' => 'Your Grey/WT not much bigger than Grey Received']);
             }
         }
@@ -56,19 +58,13 @@ class BatchController extends Controller
         $insert->save();
 
         for ($i = 0; $i < count($request->gray_wt); $i++) {
-            $lab = Lab::findOrFail($request->lab_id[$i]);
-            $batch_amount = $lab->batch_amount + $request->gray_wt[$i];
-            $remaining = $lab->remaining_grey - $request->gray_wt[$i];
-            $lab->batch_amount = $batch_amount;
-            $lab->remaining_grey = $remaining;
-            if ($remaining < 1) {
-                $lab->batch_status = 1;
-            }
+            $lab = Order_list::findOrFail($request->order_list_id[$i]);
+            $batch_amount = $lab->batch_received + $request->gray_wt[$i];
+            $lab->batch_received = $batch_amount;
             $lab->save();
 
             $batch_list = new BatchList();
             $batch_list->order_list_id = $request->order_list_id[$i];
-            $batch_list->lab_id = $request->lab_id[$i];
             $batch_list->batch_id = $insert->id;
             $batch_list->mark_hole = $request->mark_hole[$i];
             $batch_list->y_lot = $request->y_lot[$i];

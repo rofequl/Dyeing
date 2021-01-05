@@ -30,13 +30,12 @@
                 <h3 class="page-title">Delivery Challan Entry</h3>
             </div>
         </div>
-
         <div class="card p-0 py-3 mb-4 text-center">
 
             <form method="get" action="{{route('delivery.entry')}}" class="form-row p-2">
                 <div class="col-xl-2 col-md-4 col-5 text-center">Order No.</div>
                 <div class="col-xl-5 form-group col-md-6 col-7">
-                    <input type="text" name="order_no" value="{{$order===null?'':$order->id}}"
+                    <input type="text" id="tags" name="order_no" value="{{$id===null?'':$id}}"
                            class="form-control"
                            placeholder="Please enter order number." required>
                 </div>
@@ -44,7 +43,6 @@
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
             </form>
-
             @if($batch!==null)
                 <table class="table" id="order_table">
                     <thead class="bg-light">
@@ -63,18 +61,19 @@
                         <tr>
                             <td>
                                 <div class="custom-control custom-checkbox mb-1">
-                                    <input type="checkbox" value="{{$batchs->batch_no}}" class="custom-control-input"
-                                           id="formsCheckbox{{$batchs->batch_no}}">
+                                    <input type="checkbox" value="{{$batchs['batch']->batch_no}}"
+                                           class="custom-control-input"
+                                           id="formsCheckbox{{$batchs['batch']->batch_no}}">
                                     <label class="custom-control-label"
-                                           for="formsCheckbox{{$batchs->batch_no}}"></label>
+                                           for="formsCheckbox{{$batchs['batch']->batch_no}}"></label>
                                 </div>
                             </td>
-                            <td>{{$batchs->order->factory->factory_name}}</td>
-                            <td>{{$batchs->batch_no}}</td>
-                            <td>{{date('d F, Y', strtotime($batchs->date))}}</td>
-                            <td>{{$batchs->work_order}}</td>
-                            <td>{{$batchs->compostion}}</td>
-                            <td>{{$batchs->stitch_length}}</td>
+                            <td>{{$batchs['batch']->order->factory->factory_name}}</td>
+                            <td>{{$batchs['batch']->batch_no}}</td>
+                            <td>{{date('d F, Y', strtotime($batchs['batch']->date))}}</td>
+                            <td>{{$batchs['batch']->work_order}}</td>
+                            <td>{{$batchs['batch']->compostion}}</td>
+                            <td>{{$batchs['batch']->stitch_length}}</td>
 
                         </tr>
                     @endforeach
@@ -82,7 +81,6 @@
                 </table>
             @endif
         </div>
-
         <div class="card card-small mb-4">
             <div class="card-header border-bottom text-right">
                     <span onclick="window.location.href='{{route('delivery.index')}}'" class="mb-0 right-hand"
@@ -100,7 +98,7 @@
                                 <div class="col-md-4 col-5 text-right">Challan No</div>
                                 <div class="form-group col-md-6 col-7">
                                     <input type="text" class="form-control" name="challan_no"
-                                           placeholder="Enter Challan No">
+                                           placeholder="Enter Challan No" required>
                                     <input type="hidden" value="{{$order===null?'':$order->id}}" name="order_id"
                                            required>
                                 </div>
@@ -158,15 +156,13 @@
                             <tr>
                                 <th scope="col" style="white-space: nowrap">Buyer</th>
                                 <th scope="col" style="white-space: nowrap">Order No.</th>
-                                <th scope="col" style="white-space: nowrap">Style No.</th>
                                 <th scope="col" style="white-space: nowrap">Batch No.</th>
-                                <th scope="col" style="white-space: nowrap">FABRICS TYPE</th>
-                                <th scope="col" style="white-space: nowrap">Color</th>
                                 <th scope="col">Dia</th>
                                 <th scope="col" style="white-space: nowrap">GSM</th>
                                 <th scope="col">GREY Quantity</th>
                                 <th scope="col">Finish Quantity</th>
-                                <th scope="col" style="white-space: nowrap">ROLL</th>
+                                <th scope="col" style="white-space: nowrap">Roll</th>
+                                <th scope="col" style="white-space: nowrap">Remarks</th>
                             </tr>
                             </thead>
                             <tbody class="AddDeliveryDiv">
@@ -204,6 +200,7 @@
 @push('style')
     <link rel="stylesheet" href="{{asset('assets/styles/responsive.dataTables.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('assets/sweetalert/sweetalert.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/TagInput/tag.min.css')}}"/>
     <style>
         @keyframes spinner-border {
             to {
@@ -230,10 +227,13 @@
     </style>
 @endpush
 @push('script')
+    <script src="{{asset('assets/TagInput/tag.min.js')}}"></script>
     <script>
         $.fn.datepicker.defaults.format = "dd MM, yyyy";
         $('.datepicker').datepicker("setDate", new Date());
-
+        $('#tags').tagsInput({
+            'height': '40px',
+        });
         $(document).on('change', 'input[type="checkbox"]', function () {
             let id = $(this).attr('value');
             if ($(this).is(":checked")) {
@@ -270,20 +270,18 @@
                         } else {
                             colour = data.batch.batchlist[i].order_list.colour.colour_name
                         }
-
+                        let dia = data.batch.batchlist[i].order_list.f_dia==null? '':data.batch.batchlist[i].order_list.f_dia;
                         product += '<tr class="Deliverylist' + data.batch.batch_no + '">\n' +
-                            '                                        <td>' + data.batch.batchlist[i].order_list.buyer.buyer + '' +
-                            '</td>\n' +
-                            '                                        <td>' + data.batch.order_id + '</td>\n' +
-                            '                                        <td>' + style + '</td>\n' +
-                            '                                        <td>' + data.batch.batch_no + '</td>\n' +
-                            '                                        <td>' + data.batch.batchlist[i].order_list.fabrics_type + '</td>\n' +
-                            '                                        <td>' + colour + '</td>\n' +
-                            '                                        <td>' + data.batch.batchlist[i].order_list.dia + '</td>\n' +
+                        '                                        <td> <input type="hidden" name="batch_list_id[]" value="' + data.batch.batchlist[i].id + '">' + data.batch.batchlist[i].order_list.buyer.buyer + '' +
+                        '</td>\n' +
+                        '                                        <td>' + data.batch.order_id + '</td>\n' +
+                        '                                        <td>' + data.batch.batch_no + '</td>\n' +
+                        '                                        <td><input placeholder="Dia" name="dia[]" class="form-control" type="text" value="' + dia + '"></td>\n' +
                             '                                        <td>' + data.batch.batchlist[i].order_list.gsm + '</td>\n' +
-                            '                                        <td>' + data.batch.batchlist[i].grey_wt + '</td>\n' +
-                            '                                        <td>' + data.batch.batchlist[i].finished_qty + '</td>\n' +
-                            '                                        <td>' + data.batch.batchlist[i].roll + '</td>\n' +
+                            '                                        <td><input name="grey_wt[]" class="form-control" type="number" value="' + data.batch.batchlist[i].grey_wt + '"></td>\n' +
+                            '                                        <td><input placeholder="Finish Quantity" name="finished_qty[]" class="form-control" type="number"></td>\n' +
+                            '                                        <td><input placeholder="Roll" name="roll[]" class="form-control" type="number" value="' + data.batch.batchlist[i].roll + '"></td>\n' +
+                            '                                        <td><input placeholder="Remarks" name="remarks[]" class="form-control" type="text" max="255"></td>\n' +
                             '                                    </tr>';
                     }
 

@@ -10,4 +10,9 @@ class Delivery extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function deliveries_list()
+    {
+        return $this->hasMany(Deliveries_list::class, 'delivery_id');
+    }
 }

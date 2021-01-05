@@ -60,7 +60,7 @@
                     <td>{{$greys->order_list_id}}</td>
                     <td>{{$greys->order_list->order->factory->factory_name}}</td>
                     <td>{{$greys->order_list->buyer->buyer}}</td>
-                    <td>{{$greys->order_list->colour->colour_name}}</td>
+                    <td>@if($greys->order_list->colour) {{$greys->order_list->colour->colour_name}} @endif</td>
                     <td>{{$greys->today_receive}}</td>
                     <td>{{$greys->dia}}</td>
                     <td>{{$greys->gsm}}</td>

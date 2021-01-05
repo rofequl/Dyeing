@@ -26,12 +26,12 @@
         <div class="page-header row no-gutters py-4">
             <div class="col-12 col-sm-6 text-center text-sm-left mb-4 mb-sm-0">
                 <span class="text-uppercase page-subtitle"></span>
-                <h3 class="page-title">Delivery Challan</h3>
+                <h3 class="page-title">Bill</h3>
             </div>
             <div class="col-12 col-sm-6 d-flex align-items-center">
                 <div class="d-inline-flex mb-sm-0 mx-auto ml-sm-auto mr-sm-0" role="group" aria-label="Page actions">
-                    <a id="add-new-event" href="{{route('delivery.entry')}}" class="btn btn-primary">
-                        <i class="material-icons">add</i> Delivery Challan Add</a>
+                    <a id="add-new-event" href="{{route('bill.entry')}}" class="btn btn-primary">
+                        <i class="material-icons">add</i> New Bill Add</a>
                 </div>
             </div>
         </div>
@@ -41,10 +41,9 @@
             <tr>
                 <th>#</th>
                 <th>Date</th>
-                <th>Order No.</th>
                 <th>Factory Name</th>
-                <th>Batch No</th>
                 <th>Challan No</th>
+                <th>Total Amount</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -52,19 +51,18 @@
             @foreach($delivery as $deliver)
                 <tr>
                     <td>{{$sl}}</td>@php $sl++; @endphp
-                    <td>{{date('d F, Y', strtotime($deliver->date))}}</td>
-                    <td>{{$deliver->order_id}}</td>
+                    <td>{{date('d F, Y', strtotime(getBillChalan($deliver->challan_no)->date))}}</td>
                     <td>{{$deliver->order->factory->factory_name}}</td>
-                    <td>{{implode(' ,',json_decode($deliver->batch_no))}}</td>
                     <td>{{$deliver->challan_no}}</td>
+                    <td>{{getBillChalan($deliver->challan_no)->total_amount}}</td>
                     <td>
                         <div class="btn-group btn-group-sm" role="group" aria-label="Table row actions">
                             <button type="button" class="btn btn-white edit"
-                                    href="{{route('delivery.challan',$deliver->id)}}">
+                                    href="{{route('bill.challan',$deliver->challan_no)}}">
                                 <i class="material-icons">remove_red_eye</i>
                             </button>
                             <button type="button" class="btn btn-white delete"
-                                    href="{{route('delivery.destroy',$deliver->id)}}">
+                                    href="{{route('bill.destroy',getBillChalan($deliver->challan_no)->id)}}">
                                 <i class="material-icons">&#xE872;</i>
                             </button>
                         </div>
@@ -103,7 +101,7 @@
                     success: function (result) {
                         swal({
                             title: "Well Done",
-                            text: "Delivery challan delete successfully",
+                            text: "Bill delete successfully",
                             type: "success",
                         }, function () {
                             location.reload();

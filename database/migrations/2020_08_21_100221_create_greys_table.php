@@ -24,7 +24,6 @@ class CreateGreysTable extends Migration
             $table->string('gsm')->nullable();
             $table->string('remarks')->nullable();
             $table->integer('lab_id')->nullable();
-            $table->boolean('lab_status')->default(0);
             $table->timestamps();
         });
     }

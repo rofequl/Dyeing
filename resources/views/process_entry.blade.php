@@ -114,7 +114,7 @@
                             <div class="col-3">Batch No:</div>
                             <div class="form-group col-6">
                                 <input type="number" class="form-control batch_no"
-                                       placeholder="Enter Batch No" max="255">
+                                       placeholder="Enter Batch No">
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="col-3 text-right">

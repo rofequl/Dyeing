@@ -2,6 +2,8 @@
 
 use App\Batch;
 use App\BatchList;
+use App\Bill;
+use App\Deliveries_list;
 use App\Grey;
 use App\Order;
 use App\Process;
@@ -117,3 +119,12 @@ function totalBatchQty($factoryId, $date)
     return $batch;
 }
 
+function getDeliveryChalan($id)
+{
+    return Deliveries_list::where('batch_list_id', $id)->first();
+}
+
+function getBillChalan($id)
+{
+    return Bill::where('challan_no', $id)->first();
+}

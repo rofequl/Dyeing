@@ -70,6 +70,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('delivery-challan/{data}', 'DeliveryController@deliveryChallan')->name('delivery.challan');
 
+    Route::resource('bill', 'BillController');
+    Route::get('bill-entry', 'BillController@newBillEntry')->name('bill.entry');
+
+    Route::get('delivery-bill/{data}', 'BillController@billChallan')->name('bill.challan');
 
 });
 

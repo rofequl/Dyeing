@@ -12,7 +12,7 @@ class LabController extends Controller
 {
     public function index()
     {
-        $lab = Lab::orderBy('id', 'DESC')->get();
+        $lab = Order_list::where('lab_status', 1)->orderBy('id', 'DESC')->get();
         return view('lab', compact('lab'));
     }
 
@@ -33,28 +33,11 @@ class LabController extends Controller
             'id' => 'required',
         ]);
 
+
         $order = Order_list::findOrFail($request->id);
-        $grey = Grey::where('order_list_id', $request->id)->where('lab_status', 0)->get();
-        $grey_id = [];
-        foreach ($grey as $greys) {
-            array_push($grey_id, $greys->id);
-        }
-
-        $lab = new Lab();
-        $lab->order_id = $order->order_id;
-        $lab->order_list_id = $order->id;
-        $lab->lab_name = $request->lab_name;
-        $lab->grey_receive = $grey->sum('today_receive');
-        $lab->remaining_grey = $grey->sum('today_receive');
-        $lab->grey_id = json_encode($grey_id);
-        $lab->save();
-
-        foreach ($grey as $greys) {
-            $insert = Grey::findOrFail($greys->id);
-            $insert->lab_id = $lab->id;
-            $insert->lab_status = 1;
-            $insert->save();
-        }
+        $order->lab_status = 1;
+        $order->lab_name = $request->lab_name;
+        $order->save();
 
 
         Session::flash('message', 'Lab entry successfully');

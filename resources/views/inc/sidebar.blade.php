@@ -57,27 +57,33 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('batch.index')}}">
+                <a class="nav-link {{Route::current()->getName() == 'batch.index'?'active':''}}" href="{{route('batch.index')}}">
                     <i class="material-icons"></i>
                     <span>Batch</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('process-entry.index')}}">
+                <a class="nav-link {{Route::current()->getName() == 'process-entry.index'?'active':''}}" href="{{route('process-entry.index')}}">
                     <i class="material-icons"></i>
                     <span>Process</span>
                 </a>
             </li>
+{{--            <li class="nav-item">--}}
+{{--                <a class="nav-link {{Route::current()->getName() == 'finished.index'?'active':''}}" href="{{route('finished.index')}}">--}}
+{{--                    <i class="material-icons"></i>--}}
+{{--                    <span>Finished Receive</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
             <li class="nav-item">
-                <a class="nav-link" href="{{route('finished.index')}}">
+                <a class="nav-link {{Route::current()->getName() == 'delivery.index'?'active':''}}" href="{{route('delivery.index')}}">
                     <i class="material-icons"></i>
-                    <span>Finished Receive</span>
+                    <span>Delivery Challan</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('delivery.index')}}">
+                <a class="nav-link {{Route::current()->getName() == 'bill.index'?'active':''}}" href="{{route('bill.index')}}">
                     <i class="material-icons"></i>
-                    <span>Delivery Challan</span>
+                    <span>Bill</span>
                 </a>
             </li>
             <li class="nav-item dropdown">

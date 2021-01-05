@@ -16,7 +16,6 @@ class CreateBatchListsTable extends Migration
         Schema::create('batch_lists', function (Blueprint $table) {
             $table->id();
             $table->integer('order_list_id');
-            $table->integer('lab_id');
             $table->integer('batch_id');
             $table->string('mark_hole')->nullable();
             $table->string('y_lot')->nullable();

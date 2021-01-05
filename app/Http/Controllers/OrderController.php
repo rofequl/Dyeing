@@ -77,8 +77,8 @@ class OrderController extends Controller
 
     public function labOrder($id)
     {
-        $factory = Grey::where('order_id', $id)->where('lab_status', 0)->get();
-        if ($factory->first() == null) {
+        $factory = Order_list::where('order_id', $id)->where('lab_status', 0)->first();
+        if (!$factory) {
             return response()->json(['status' => 'error'], 404);
         }
 
@@ -86,12 +86,12 @@ class OrderController extends Controller
         $order = Order_list::where('order_id', $id)->get();
 
         foreach ($order as $orders) {
-            $grey = Grey::where('order_list_id', $orders->id)->with('order.factory')->where('lab_status', 0)->get();
-            $quantity = $grey->sum('today_receive');
-
-            if ($grey->first() != null && $quantity != 0) {
+            $quantity = (int)$orders->grey_received - (int)$orders->batch_received;
+            $style = $orders->style ? $orders->style->style_name : '';
+            $color = $orders->colour ? $orders->colour->colour_name : '';
+            if ($quantity != 0) {
                 $collection->push(['id' => $orders->id, 'factory_name' => $orders->order->factory->factory_name,
-                    'style' => $orders->style->style_name, 'color' => $orders->colour->colour_name,
+                    'style' => $style, 'color' => $color,
                     'fabrics_type' => $orders->fabrics_type, 'grey_receive' => $quantity,
                     'buyer_name' => $orders->buyer->buyer]);
             }
@@ -103,22 +103,22 @@ class OrderController extends Controller
 
     public function batchOrder($id)
     {
-        $collection = collect();
-
-        $lab = Lab::where('order_id', $id)->where('batch_status', 0)->get();
+        $lab = Order_list::where('order_id', $id)->where('lab_status', 1)->get();
 
         if ($lab->first() == null) {
             return response()->json(['status' => 'error'], 404);
         }
-
+        $collection = collect();
         foreach ($lab as $labs) {
-            $order = Order_list::findOrFail($labs->order_list_id);
-
-            $collection->push(['id' => $labs->id, 'factory_name' => $order->order->factory->factory_name,
-                'style' => $order->style->style_name, 'color' => $order->colour->colour_name,
-                'fabrics_type' => $order->fabrics_type, 'grey_receive' => $labs->remaining_grey, 'lab_app' => $labs->lab_name,
-                'buyer_name' => $order->buyer->buyer]);
-
+            $grey = (int)$labs->grey_received - (int)$labs->batch_received;
+            if ($grey > 0) {
+                $style = $labs->style ? $labs->style->style_name : '';
+                $color = $labs->colour ? $labs->colour->colour_name : '';
+                $collection->push(['id' => $labs->id, 'factory_name' => $labs->order->factory->factory_name,
+                    'style' => $style, 'color' => $color,
+                    'fabrics_type' => $labs->fabrics_type, 'grey_receive' => $grey, 'lab_app' => $labs->lab_name,
+                    'buyer_name' => $labs->buyer->buyer]);
+            }
         }
 
         return response()->json(['status' => 'success', 'order' => $collection], 200);
@@ -132,7 +132,7 @@ class OrderController extends Controller
 
     public function simpleOrder($id)
     {
-        $order = Lab::with('order', 'order.factory', 'order_list.buyer', 'order_list.style', 'order_list.colour')->where('id', $id)->get()->first();
+        $order = Order_list::with('order', 'order.factory', 'buyer', 'style', 'colour')->where('id', $id)->get()->first();
         return response()->json(['status' => 'success', 'order' => $order], 200);
     }
 

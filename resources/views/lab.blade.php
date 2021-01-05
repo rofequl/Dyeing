@@ -54,13 +54,13 @@
             @foreach($lab as $labs)
                 <tr>
                     <td>{{$sl}}</td>@php $sl++; @endphp
-                    <td>{{$labs->order_list->order->factory->factory_name}}</td>
-                    <td>{{$labs->order_list->buyer->buyer}}</td>
+                    <td>{{$labs->order->factory->factory_name}}</td>
+                    <td>{{$labs->buyer->buyer}}</td>
                     <td>{{$labs->order_id}}</td>
-                    <td>{{$labs->order_list->style->style_name}}</td>
-                    <td>{{$labs->order_list->colour->colour_name}}</td>
+                    <td>@if($labs->style) {{$labs->style->style_name}} @endif</td>
+                    <td>@if($labs->colour) {{$labs->colour->colour_name}} @endif</td>
                     <td>{{$labs->lab_name}}</td>
-                    <td>{{$labs->grey_receive}}</td>
+                    <td>{{(int)$labs->grey_received - (int)$labs->batch_received}}</td>
                 </tr>
             @endforeach
             </tbody>

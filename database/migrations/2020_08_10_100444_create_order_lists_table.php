@@ -29,6 +29,9 @@ class CreateOrderListsTable extends Migration
             $table->string('quantity')->nullable();
             $table->string('remaining')->default(0);
             $table->string('grey_received')->default(0);
+            $table->string('batch_received')->default(0);
+            $table->boolean('lab_status')->default(0);
+            $table->string('lab_name')->nullable();
             $table->timestamps();
         });
     }

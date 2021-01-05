@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
-    <title>Delivery Challan</title>
+    <title>BILL</title>
     <style>
         #invoice {
             padding: 30px;
@@ -103,7 +103,7 @@
                         <p>Factory: Dhaka-Narshingdi Highway, Vulta, Rupgonj, Narayanganj</p>
                         <hr>
                         <div class="row justify-content-center">
-                            <div class="bg-dark text-light col-2 p-1 rounded" style="">Delivery Challan</div>
+                            <div class="bg-dark text-light col-2 p-1 rounded" style="">BILL</div>
                         </div>
 
                     </div>
@@ -112,16 +112,15 @@
             <main>
                 <div class="row contacts">
                     <div class="col invoice-to">
-                        <div class="text-gray-light">Challan No: {{$delivery->challan_no}}</div>
+                        <div class="text-gray-light">Bill No: {{$delivery->challan_no}}</div>
                         <h4 class="to">{{$delivery->order->factory->factory_name}}</h4>
                         <div class="address">{{$delivery->order->factory->address}}</div>
                         <div class="email"><a href="mailto:john@example.com">{{$delivery->order->factory->phone}}</a>
                         </div>
                     </div>
                     <div class="col invoice-details">
-                        <div class="date">Date: {{date('d F, Y', strtotime($delivery->date))}}</div>
-                        <div class="date">Vehicle No: {{$delivery->vehicle_no}}</div>
-                        <div class="date">Driver's Name: {{$delivery->driver_name}}</div>
+                        <div class="date">Date: {{date('d F, Y', strtotime(getBillChalan($delivery->challan_no)->date))}}</div>
+                        <div class="text-gray-light">Challan No: {{$delivery->challan_no}}</div>
                     </div>
                 </div>
                 <table class="table table-bordered text-center">
@@ -136,8 +135,8 @@
                         <th scope="col">Dia</th>
                         <th scope="col">GSM</th>
                         <th scope="col">Grey Quantity</th>
-                        <th scope="col">Finish Quantity</th>
-                        <th scope="col">Roll</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Total Amount</th>
                         <th scope="col" class="hidden-print">Remarks</th>
                     </tr>
                     </thead>
@@ -166,39 +165,39 @@
                                 <td>{{getDeliveryChalan($batch->id)->dia}}</td>
                                 <td>{{$batch->order_list->gsm}}</td>
                                 <td>{{getDeliveryChalan($batch->id)->grey_wt}}</td>
-                                <td>{{getDeliveryChalan($batch->id)->finished_qty}}</td>
-                                <td>{{getDeliveryChalan($batch->id)->roll}}</td>
-                                <td class="hidden-print">{{getDeliveryChalan($batch->id)->delivery_remarks}}</td>
+                                <td>{{getDeliveryChalan($batch->id)->unit_price}}</td>
+                                <td>{{getDeliveryChalan($batch->id)->total_price}}</td>
+                                <td class="hidden-print">{{getDeliveryChalan($batch->id)->bill_remarks}}</td>
                             </tr>
                         @endforeach
                     @endforeach
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td colspan="7" class="border-0"></td>
-                        <td class="text-right">Total =</td>
-                        <td>{{$delivery->deliveries_list->sum('grey_wt')}}</td>
-                        <td>{{$delivery->deliveries_list->sum('finished_qty')}}</td>
-                        <td>{{$delivery->deliveries_list->sum('roll')}}</td>
+                        <td colspan="10" class="text-right">Total =</td>
+                        <td>{{getBillChalan($delivery->challan_no)->total_amount}}</td>
                         <td class="hidden-print"></td>
                     </tr>
                     </tfoot>
                 </table>
+                <p>
+                    Amount (in Words) <u class="text-capitalize" style="text-decoration-style: dotted">{{getBillChalan($delivery->challan_no)->amount_word}}</u>
+                </p>
 
             </main>
             <footer style="margin-top: 60px">
                 <div class="row text-center">
                     <div class="col">
                         ________________<br>
-                        Received BY
+                        Receiver's Signature
                     </div>
                     <div class="col">
                         ______________<br>
-                        Security Insert
+                        Prepared By
                     </div>
                     <div class="col">
                         ___________<br>
-                        Store Officer
+                        Accounts
                     </div>
                     <div class="col">
                         ______________<br>

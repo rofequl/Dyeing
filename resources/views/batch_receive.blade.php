@@ -318,43 +318,44 @@
                 },
                 success: function (data) {
                     var colour;
-                    if (data.order.order_list.colour == null) {
+                    if (data.order.colour == null) {
                         colour = ''
                     } else {
-                        colour = data.order.order_list.colour.colour_name
+                        colour = data.order.colour.colour_name
                     }
                     $('.order_id').val(data.order.order_id);
                     $('.factory_name').val(data.order.order.factory.factory_name);
-                    $('.buyer_name').val(data.order.order_list.buyer.buyer);
-                    $('.style').val(data.order.order_list.style.style_name);
+                    $('.buyer_name').val(data.order.buyer.buyer);
+                    $('.style').val(data.order.style.style_name);
                     $('.colour').val(colour);
-                    $('.fab_type').val(data.order.order_list.fabrics_type);
-                    $('.yarn_count').val(data.order.order_list.yarn_count);
-                    $('.finish_gsm').val(data.order.order_list.gsm);
-                    $('.mc_dia').val(data.order.order_list.dia);
-                    $('.finish_dia').val(data.order.order_list.f_dia);
+                    $('.fab_type').val(data.order.fabrics_type);
+                    $('.yarn_count').val(data.order.yarn_count);
+                    $('.finish_gsm').val(data.order.gsm);
+                    $('.mc_dia').val(data.order.dia);
+                    $('.finish_dia').val(data.order.f_dia);
+
+                    let grey_quantity = parseInt(data.order.grey_received) - parseInt(data.order.batch_received);
 
                     let product = ' <tr class="batchlist' + id + '">\n' +
                         '                                <td>\n' +
-                        '<input type="hidden" name="order_list_id[]" value="' + data.order.order_list_id + '" required>' +
-                        '<input type="hidden" name="lab_id[]" value="' + data.order.id + '" required>' +
+                        '<input type="hidden" name="order_list_id[]" value="' + data.order.id + '" required>' +
                         '                                    <input type="text"\n' +
-                        '                                           class="form-control" value="' + data.order.order_list.fabrics_type + '" max="255" readonly>\n' +
+                        '                                           class="form-control" value="' + data.order.fabrics_type + '" max="255" readonly>\n' +
                         '                                </td>\n' +
                         '                                <td>\n' +
                         '                                    <input type="text"\n' +
-                        '                                           class="form-control" value="' + data.order.order_list.dia + '" max="255" readonly>\n' +
+                        '                                           class="form-control" value="' + data.order.dia + '" max="255" readonly>\n' +
                         '                                </td>\n' +
                         '                                <td>\n' +
                         '                                    <input type="text"\n' +
-                        '                                           class="form-control" value="' + data.order.order_list.f_dia + '" max="255" readonly>\n' +
+                        '                                           class="form-control" value="' + data.order.f_dia + '" max="255" readonly>\n' +
                         '                                </td>\n' +
                         '                                <td><input name="mark_hole[]" type="text"\n' +
                         '                                           class="form-control mark_hole" max="255"></td>\n' +
                         '                                <td><input name="y_lot[]" type="text"\n' +
                         '                                           class="form-control y_lot" max="255"></td>\n' +
                         '                                <td><input name="gray_wt[]" type="number"\n' +
-                        '                                           class="form-control gray_wt" max="' + data.order.remaining_grey + '" required></td>\n' +
+                        '                                           class="form-control gray_wt" max="' + grey_quantity + '" required></td>\n' +
                         '                                <td><input name="roll[]" type="text"\n' +
                         '                                           class="form-control roll" max="255"></td>\n' +
                         '                            </tr>';
